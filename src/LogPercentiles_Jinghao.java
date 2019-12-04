@@ -396,6 +396,15 @@ class LogPercentiles_Jinghao{
 			System.out.println("95% of requests return a response within "+ nfp_res +" ms");
 			System.out.println("99% of requests return a response within "+ nnp_res +" ms");
 
+			//delete all tmp files and tmp directory 
+			File tmp_dir = new File("/var/log/httpd/tmp"); 
+			String[] tmp_list = tmp_dir.list();
+			for(int i=0; i<tmp_list.length; i++){
+				File f1 = new File("/var/log/httpd/tmp/"+tmp_list[i]);
+				f1.delete();	
+			}
+			tmp_dir.delete();
+
 		}catch(FileNotFoundException e){
 			System.out.println("merged.log was not found");
 		}catch(IOException e){

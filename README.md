@@ -4,15 +4,13 @@
 「Java Program」  
 Log Percentile helps you analyze response time of target logs, and quickly calculate READ API requests response time range.
 
-[![](https://www.mdeditor.com/images/logos/markdown.png)](https://www.mdeditor.com/images/logos/markdown.png "markdown")
-
 ----
 
 ### Documentation Links
-[User Guide](https://www.mdeditor.com/)  
-[Algorithm](https://www.mdeditor.com/)  
-[Time&Space Complexity](https://www.mdeditor.com/)  
-[Test Requirements](https://www.mdeditor.com/)  
+[User Guide](https://github.com/jeremyjing/Riot_LogPercentiles/blob/master/documentation/User%20Guide.txt)  
+[Algorithm](https://github.com/jeremyjing/Riot_LogPercentiles/blob/master/documentation/Algorithm.txt)  
+[Time & Space Complexity](https://github.com/jeremyjing/Riot_LogPercentiles/blob/master/documentation/Time_n_Space%20Complexity.txt)  
+[Test Requirements](https://github.com/jeremyjing/Riot_LogPercentiles/blob/master/documentation/Test%20Requirements.txt)  
 
 ----
 

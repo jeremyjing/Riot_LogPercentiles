@@ -1,0 +1,34 @@
+How to Run:
+1. Download LogPercentiles_Jinghao.java from src
+2. Compile LogPercentiles_Jinghao.java by:
+$javac LogPercentiles_Jinghao.java
+3. Run LogPercentiles_Jinghao.java by:
+$java LogPercentiles_Jinghao
+4. Follow the instruction to input
+5. Hit Enter to get output
+
+Note:
+Input format:
+If you want the data from 02:00 of Nov 12, 2019 enter:
+2019-11-12-02 2019-11-12-02
+
+If you want the data from 02:00 of Nov 12, 2019 to 05:59 of Nov 14 2019, enter:
+2019-11-12-02 2019-11-13-05
+
+
+Test Requirement:
+1. All READ API logs must be stored at:
+/var/log/httpd/*.log
+
+2. The RAM of PC to run the program must be at least 2GB.
+
+
+How to Improve: 
+1. When sort HashMap that stores tmp file names and the largest element of each of tmp file, instead of using comparator, utilize quick sort algorithm can reduce time complexity from 0(n^2) to O(nlogn)
+
+2. Use multithreading pipeline to concurrently split response time in READ API logs into partition and parallely sort, merge to merged.log
+
+
+
+
+

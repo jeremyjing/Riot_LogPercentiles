@@ -1,0 +1,51 @@
+The test is asking to find the range of big data based on response time that we can get from READ API logs. 
+
+Note:
+1. Since the size of each log file is very big, they will not be considered to be sorted in memory in a one time manner. Thus this is a typical external sort problem. Quick sort will be used as well.  
+2. Because we are only focusing on finding the response time range, for each log line, we do not need to worry about ip address, error code, or other info. 
+
+Algorithm:
+1. Based on the memory, make a partition with certain size to temporarly store part of the response time we get from log file. 
+2. Read the log file, store unstored response time of each line into partition. 
+3. Quick sort the respone time in partition.
+4. Ouput sorted data into a temporaray file. If the partition array is empty, clear it and store data to a new temp file. 
+5. Repeated step 2 - 4 until all log files are read. 
+6. Read the largest response time from each sorted temporary file and store each of them into an HashMap<String, Integer> with string represents temp file name and Integer represents response time. 
+7. Quick sort HashMap, output largest one into merged.log file.
+8. Repeat step 8, 9 until response time in all temp files are output into the merged.log 
+9. To find the 90%, 95%, 99% response time range, since each response time occupies one line, and they are stored from large to small
+	line num = X% time range = total line number * (100%-X%)
+We find the response time correspond to line num, it is the result. 
+
+
+The program structure and time & space complexity:
+assume there are n lines of log in all READ API logs and m log files we want to analyze. 
+
+1. get_logs():					
+		partition_sort():       
+			quick_sort();		O(nlogn) & O(n)
+			write_to_file():	O(n) & O(1)
+
+2. merge_tmp_files():			
+		compare_and_sort();		O(n) & O(n)
+		sort_map_by_value();    0(n^2) & O(1)
+		merge_to_file();		O(n) & O(1)
+
+3. find_response_time();		O(1) & O(1)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

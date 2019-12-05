@@ -7,8 +7,8 @@ import java.lang.*;
 
 
 class LogPercentiles_Jinghao{
-	static int partition_size = 10000000; //allocate 10^7 elements for each partition 
-								
+	static int partition_size = 1000000; //allocate 10^6 elements for each partition 
+
 	public static void main (String [] args){
 		System.out.println("What is the time variance of READ API Logs you want to analyze? (Please enter the date and time of logs you want to analyze).");
 		System.out.println("If you enter 2019-11-12-00 2019-11-12-00, then you will get the logs from 00:00 - 00:59 of Nov12, 2019.");
@@ -18,7 +18,6 @@ class LogPercentiles_Jinghao{
 		String time_variance_start = sc.next();
 		String time_variance_end = sc.next();
 
-		//System.out.println("Input file: "+time_variance_start+" and "+time_variance_end);
 		try{
 		LogPercentiles_Jinghao lp = new LogPercentiles_Jinghao();
 			//get logs from past time_variance hours, 
@@ -52,7 +51,7 @@ class LogPercentiles_Jinghao{
 				Date date2 = simpleDateFormat.parse(time_variance_end);
 				long ts_s = date1.getTime();
 				long ts_e = date2.getTime();
-				//System.out.println("ts_s: "+ts_s+" ts_e: "+ts_e);
+
 				//determine target log files based on time stamp of each log file
 				//and calculate total line number of logs
 				File http_dir = new File("/var/log/httpd"); 
@@ -63,16 +62,13 @@ class LogPercentiles_Jinghao{
 						Date date = simpleDateFormat.parse(file_time_s);
 						long file_time = date.getTime();
 						if(file_time>=ts_s && file_time<=ts_e){
-							//System.out.println("target file is "+file);
 							target_logs.add(file);
 							File f = new File("/var/log/httpd/"+file);
 							//getting total line number of all files
 							LineNumberReader lineNumberReader = new LineNumberReader(new FileReader(f));
 							lineNumberReader.skip(Long.MAX_VALUE);
 		    	           	int lines = lineNumberReader.getLineNumber()+1;
-		    	           	//System.out.println(file+" line: "+lines);
 		    	           	line_numbers = line_numbers + lines;
-		    	           	//System.out.println("total line: "+line_numbers);
 		    	           	lineNumberReader.close();
 		    	        }
 		    	    }	
@@ -88,7 +84,6 @@ class LogPercentiles_Jinghao{
 			LineNumberReader lineNumberReader = new LineNumberReader(new FileReader(f));
     		lineNumberReader.skip(Long.MAX_VALUE);
     	    line_numbers = lineNumberReader.getLineNumber()+1;
-    	    //System.out.println("total line: "+line_numbers);
     	    lineNumberReader.close();
 		}
 		partition_sort(target_logs, line_numbers);
@@ -117,12 +112,11 @@ class LogPercentiles_Jinghao{
 					}
 					String tmp1 = tmp.substring(p+1, tmp.length());
 					int response_time = Integer.parseInt(tmp1);
-					//System.out.println("scanning file line: "+tmp+" time: "+tmp1+" int: "+response_time);
-					rt[i] = response_time;	
+					rt[i] = response_time;
 					i++;
 				}else if(sc.hasNextLine()){ 
 					//no space in partition, write into the output file and start with new partition
-					quick_sort(rt, 0, rt.length-1);  //quick sort all time stamps in partitions
+					quick_sort(rt, 0, i-1);  //quick sort all time stamps in partitions
 					String tmp_file = "/var/log/httpd/tmp/" + a +".log";
 					write_to_file(rt, tmp_file);	//write partitions to temp files
 					a++;
@@ -133,10 +127,9 @@ class LogPercentiles_Jinghao{
 		//sort partition
 		quick_sort(rt, 0, i-1);
 		int[] rt_tmp = new int[i];
-		for(int m=0; m<i; m++){
-			rt_tmp[m]=rt[m];
-			//System.out.println("After sort, rt_tmp[i]: "+rt_tmp[m]+" --- "+(m+1));
-		}
+		 for(int m=0; m<i; m++){
+		 	rt_tmp[m]=rt[m];
+		 }
 		String tmp_file = "/var/log/httpd/tmp/" + a +".log";
 		write_to_file(rt_tmp, tmp_file);
 	}
@@ -180,10 +173,10 @@ class LogPercentiles_Jinghao{
             FileWriter fw = new FileWriter(file);
             bufw = new BufferedWriter(fw);
             for (int i = 0; i < A.length; i++) {
-            	//System.out.println("Writing A[i]: "+A[i]+" --- "+i);
-                bufw.write(String.valueOf(A[i]));
-                bufw.newLine();
-                bufw.flush();
+	            bufw.write(String.valueOf(A[i]));
+	            bufw.newLine();
+	            bufw.flush();
+
             }
         } catch (IOException e) {
             System.out.println(e.getMessage());
@@ -210,7 +203,6 @@ class LogPercentiles_Jinghao{
 			if(!f1.isDirectory()){
 	    	    store.put(tmp_list[i], 0);
 	    	    line_count.put(tmp_list[i], 1);
-	    	    //System.out.println("file: "+tmp_list[i]);
     		}
 		}
 
@@ -223,7 +215,6 @@ class LogPercentiles_Jinghao{
 			File f = new File ("/var/log/httpd/tmp/merged.log");
 	        f.createNewFile();
 	        Iterator<Map.Entry<String, Integer>> iterator = map.entrySet().iterator();
-	        HashMap<String, Integer> sorted_map = new HashMap<String, Integer>();
 			while (iterator.hasNext()) { 
 				Map.Entry<String, Integer> entry = iterator.next();
 	            String key = entry.getKey(); 
@@ -236,7 +227,7 @@ class LogPercentiles_Jinghao{
 	            } 
 	        } 
 
-	        sorted_map = sort_map_by_value(map);
+	        HashMap<String, Integer> sorted_map = sort_map_by_value(map);
 	        while(sorted_map.size()!=0){
 				sorted_map = sort_map_by_value(sorted_map);
 				HashMap.Entry<String, Integer> first = sorted_map.entrySet().iterator().next();
@@ -244,21 +235,17 @@ class LogPercentiles_Jinghao{
 				while (iterator1.hasNext()){
 					Map.Entry<String, Integer> entry = iterator1.next();
 					String key = entry.getKey(); 
-					//System.out.println("key: "+key+" value: "+entry.getValue());
 				}
 
 				Integer res_tmp = first.getValue();
 				int res = res_tmp.intValue();
-				//System.out.println("merging res to: "+res);
 				merge_to_file(res, f);
 
 				String file_name = first.getKey();
-				//System.out.println("file name: "+file_name);
 				File fs = new File("/var/log/httpd/tmp/"+file_name);
 				Scanner sc = new Scanner(fs);
 				Integer line_num = line_count.get(file_name);
 				Integer tmp_line_num = line_num;
-				//System.out.println("line number: "+line_num);
 				String line="";
 				while(tmp_line_num>=0){
 					if(sc.hasNextLine()){
@@ -269,11 +256,10 @@ class LogPercentiles_Jinghao{
 						break;
 					}
 				}
-				//System.out.println("line is: "+line);
+
 				if(line!=null){
 					Integer i = Integer.valueOf(line);
 					line_num = line_num + 1;
-					//System.out.println("Integer i is: "+i+" line_num is: "+line_num);
 					sorted_map.put(file_name, i);
 					line_count.put(file_name, line_num);
 				}else{
@@ -400,7 +386,7 @@ class LogPercentiles_Jinghao{
 			File tmp_dir = new File("/var/log/httpd/tmp"); 
 			String[] tmp_list = tmp_dir.list();
 			for(int i=0; i<tmp_list.length; i++){
-				File f1 = new File("/var/log/httpd/tmp/"+tmp_list[i]);
+			 	File f1 = new File("/var/log/httpd/tmp/"+tmp_list[i]);
 				f1.delete();	
 			}
 			tmp_dir.delete();

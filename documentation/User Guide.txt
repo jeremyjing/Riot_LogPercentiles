@@ -28,6 +28,8 @@ How to Improve:
 
 2. Use multithreading pipeline to concurrently split response time in READ API logs into partition and parallely sort, merge to merged.log
 
+make_logs.java:
+This program randomly make logs from 2019-11-12 to 2019-11-13 for test purpose. You can ignore this file.
 
 
 

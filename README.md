@@ -4,6 +4,7 @@
 「Java Program」  
 Log Percentile helps you analyze response time of target logs, and quickly calculate READ API requests response time range.
 
+![](https://github.com/jeremyjing/Riot_LogPercentiles/blob/master/image/icon.jpg)
 ----
 
 ### Documentation Links
